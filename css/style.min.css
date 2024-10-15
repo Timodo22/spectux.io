@@ -4,7 +4,7 @@
  */
 html, body {
   width: 100%;
-  overflow-x: hidden; }
+}
 
 
 
@@ -263,9 +263,6 @@ section {
   overflow: hidden !important;
 }
 
-html, body {
-  overflow-x: hidden !important;
-}
 
 .rectangle-1 {
   width: 2000px;
