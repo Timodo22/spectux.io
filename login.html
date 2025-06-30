@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--
+    -->
+    <meta charset="utf-8">
+    <title>SpectUX</title>
+    <meta name="description" content="Spectux, Where the focus is on the user experience,
+    and using innovative technologies.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="img/spectux_logo.png" type="image/x-icon">
+
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="vendor/select2/select2.min.css">
+    <link rel="stylesheet" href="vendor/owlcarousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="vendor/lightcase/lightcase.css">
+     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400|Work+Sans:300,400,700" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <!-- Modernizr JS for IE8 support of HTML5 elements and media queries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+
+
+</head>
+<body  data-target="#navbar" class="static-layout">
+
+
+
+	<nav id="header-navbar" class="navbar navbar-expand-lg py-4">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center text-white" href="/">
+            <h3 class="font-weight-bolder mb-0">SpectUX</h3>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-nav-header" aria-controls="navbar-nav-header" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="lnr lnr-menu"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-nav-header">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="side-nav" class="sidenav">
+	<a href="javascript:void(0)" id="side-nav-close">&times;</a>
+
+</div><div id="side-search" class="sidenav">
+	<a href="javascript:void(0)" id="side-search-close">&times;</a>
+	<div class="sidenav-content">
+		<form action="">
+
+			<div class="input-group md-form form-sm form-2 pl-0">
+			  <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search">
+			  <div class="input-group-append">
+			    <button class="input-group-text red lighten-3" id="basic-text1">
+			    	<span class="lnr lnr-magnifier"></span>
+			    </button>
+			  </div>
+			</div>
+
+		</form>
+	</div>
+   
+</div>	
+
+
+<div class="jumbotron d-flex align-items-center">
+    <div class="container text-center">
+        <h1 class="display-1 mb-4">
+          <span class="spec">LOG</span><span class="tux">IN</span>
+        </h1>
+      </div>
+      
+  <div class="rectangle-1"></div>
+  <div class="rectangle-2"></div>
+  <div class="rectangle-transparent-1"></div>
+  <div class="rectangle-transparent-2"></div>
+  <div class="circle-1"></div>
+  <div class="circle-2"></div>
+  <div class="circle-3"></div>
+  <div class="triangle triangle-1">
+  	<img src="img/obj_triangle.png" alt="">
+  </div>
+  <div class="triangle triangle-2">
+  	<img src="img/obj_triangle.png" alt="">
+  </div>
+  <div class="triangle triangle-3">
+  	<img src="img/obj_triangle.png" alt="">
+  </div>
+  <div class="triangle triangle-4">
+  	<img src="img/obj_triangle.png" alt="">
+  </div>
+</div>	<!-- Features Section-->
+
+
+
+    <style>
+        /* SpectUX Original Styling */
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: #2c3e50;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Auth Section - Same styling as features section */
+        #auth-section {
+            background: #fff;
+            padding: 80px 0;
+        }
+
+        .auth-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-sub-title {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Auth Tabs - Same style as feature items */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            background: #fff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #2c3e50;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ecf0f1;
+        }
+
+        .auth-tab:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(135deg, #764ba2 0%, #ff00cc 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .auth-tab i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        /* Auth Card - Same style as feature items */
+        .auth-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Forms */
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            height: 50px;
+            border: 2px solid #ecf0f1;
+            border-radius: 5px;
+            padding: 0 15px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #ff00cc;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+        }
+
+        /* Buttons - Same style as SpectUX buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #764ba2 0%, #ff00cc 100%);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 15px 30px;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #ff00cc 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-google {
+            background: #fff;
+            border: 2px solid #ecf0f1;
+            border-radius: 5px;
+            color: #2c3e50;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 15px 30px;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-google:hover {
+            border-color: #4285f4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.2);
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Divider */
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            color: #7f8c8d;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #ecf0f1;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: #fff;
+            padding: 0 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* User Info - Same style as feature items */
+        .user-info {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: block;
+            border: 3px solid #ff00cc;
+        }
+
+        .user-info h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .user-info p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: linear-gradient(135deg, #d62c1a 0%, #a93226 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Brand Logo */
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+        }
+
+        .brand-logo .spec {
+            color: #ff00cc;
+        }
+
+        .brand-logo .tux {
+            color: #764ba2;
+        }
+
+        .brand-logo p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .auth-container {
+                margin: 0 15px;
+            }
+            
+            .auth-card {
+                padding: 30px 20px;
+            }
+            
+            .brand-logo h1 {
+                font-size: 2.5rem;
+            }
+
+            .auth-tabs {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Section -->
+    <!-- Auth Section -->
+    <section id="auth-section">
+        <div class="container">
+            <div class="section-content">
+                <div class="title-wrap mb-5" data-aos="fade-up">
+                    <h2 class="section-title">
+                        Welkom bij Spect<span style="color: #ff00cc;">UX</span>
+                    </h2>
+                    <p class="section-sub-title">Log in of maak een account aan om toegang te krijgen tot ons platform</p>
+                </div>
+
+                <div class="auth-container">
+                    <div id="alertContainer"></div>
+
+                    <div id="userInfo" class="auth-card user-info" style="display: none;" data-aos="fade-up">
+                        <img id="userAvatar" class="user-avatar" src="" alt="User Avatar">
+                        <h4 id="userName"></h4>
+                        <p id="userEmail"></p>
+                        <button class="btn btn-logout" onclick="signOut()">
+                            <i class="fas fa-sign-out-alt"></i> Uitloggen
+                        </button>
+                    </div>
+
+                    <div id="authForms" data-aos="fade-up">
+                        <div class="auth-tabs">
+                            <div class="auth-tab active" onclick="switchTab(event, 'login')">
+                                <i class="fas fa-sign-in-alt"></i> Inloggen
+                            </div>
+                            <div class="auth-tab" onclick="switchTab(event, 'register')">
+                                <i class="fas fa-user-plus"></i> Registreren
+                            </div>
+                        </div>
+
+                        <div class="auth-card">
+                            <!-- Login Form -->
+                            <form id="loginForm" class="auth-form active">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="loginEmail" placeholder="E-mailadres" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="loginPassword" placeholder="Wachtwoord" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="btn-text">Inloggen</span>
+                                    <span class="loading" style="display: none;"></span>
+                                </button>
+                            </form>
+
+                            <!-- Register Form -->
+                            <form id="registerForm" class="auth-form">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="registerName" placeholder="Volledige naam" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="registerDomain" placeholder="Domein (bijv. spectux.com)" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="registerEmail" placeholder="E-mailadres" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="registerPassword" placeholder="Wachtwoord (min. 6 tekens)" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <span class="btn-text">Account aanmaken</span>
+                                    <span class="loading" style="display: none;"></span>
+                                </button>
+                            </form>
+
+                            <div class="divider"><span>of</span></div>
+
+                            <!-- Google Sign In Button -->
+                            <button class="btn-google" onclick="signInWithGoogle()">
+                                <svg class="google-icon" viewBox="0 0 24 24">
+                                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                </svg>
+                                Doorgaan met Google
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+    signOut as firebaseSignOut,
+    onAuthStateChanged,
+    updateProfile
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCMHNg2DHs8ggy1_g_3BNTdqNqiW2gFGNw",
+  authDomain: "spectux-f4434.firebaseapp.com",
+  projectId: "spectux-f4434",
+  storageBucket: "spectux-f4434.firebasestorage.app",
+  messagingSenderId: "789825620052",
+  appId: "1:789825620052:web:13cf006aeb8eea293285c1",
+  measurementId: "G-ND5FW3PE2F"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
+
+  // Tab switching
+  function switchTab(e, tabName) {
+    document.querySelectorAll('.auth-tab').forEach(tab => tab.classList.remove('active'));
+    e.currentTarget.classList.add('active');
+    document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+    document.getElementById(tabName + 'Form').classList.add('active');
+    clearAlerts();
+  }
+
+  function showAlert(message, type = 'danger') {
+    const alertContainer = document.getElementById('alertContainer');
+    alertContainer.innerHTML = `
+      <div class="alert alert-${type}" data-aos="fade-down">
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        ${message}
+      </div>`;
+    if (type === 'success') setTimeout(clearAlerts, 3000);
+  }
+
+  function clearAlerts() {
+    document.getElementById('alertContainer').innerHTML = '';
+  }
+
+  function setLoading(formId, isLoading) {
+    const form = document.getElementById(formId);
+    const button = form.querySelector('button[type="submit"]');
+    const btnText = button.querySelector('.btn-text');
+    const loading = button.querySelector('.loading');
+
+    if (isLoading) {
+      button.disabled = true;
+      btnText.style.display = 'none';
+      loading.style.display = 'inline-block';
+    } else {
+      button.disabled = false;
+      btnText.style.display = 'inline';
+      loading.style.display = 'none';
+    }
+  }
+
+  function showUserInfo(user) {
+    document.getElementById('authForms').style.display = 'none';
+    document.getElementById('userInfo').style.display = 'block';
+    document.getElementById('userName').textContent = user.displayName || 'Gebruiker';
+    document.getElementById('userEmail').textContent = user.email;
+    document.getElementById('userAvatar').src = user.photoURL ||
+      `https://via.placeholder.com/80x80/667eea/white?text=${user.displayName.charAt(0)}`;
+  }
+
+  function hideUserInfo() {
+    document.getElementById('authForms').style.display = 'block';
+    document.getElementById('userInfo').style.display = 'none';
+  }
+
+  async function signInWithGoogle() {
+    try {
+      clearAlerts();
+      const result = await signInWithPopup(auth, provider);
+      showAlert('Succesvol ingelogd met Google!', 'success');
+      showUserInfo(result.user);
+    } catch (error) {
+      console.error(error);
+      showAlert('Fout bij inloggen met Google: ' + error.message);
+    }
+  }
+
+  async function signOut() {
+    try {
+      await firebaseSignOut(auth);
+      showAlert('Succesvol uitgelogd!', 'success');
+      hideUserInfo();
+    } catch (error) {
+      console.error(error);
+      showAlert('Fout bij uitloggen: ' + error.message);
+    }
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    try {
+      clearAlerts();
+      setLoading('loginForm', true);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      showAlert('Succesvol ingelogd!', 'success');
+      showUserInfo(userCredential.user);
+    } catch (error) {
+      console.error(error);
+      let msg = 'Er is een fout opgetreden bij het inloggen.';
+      if (error.code === 'auth/user-not-found') msg = 'Geen account gevonden met dit e-mailadres.';
+      if (error.code === 'auth/wrong-password') msg = 'Onjuist wachtwoord.';
+      if (error.code === 'auth/invalid-email') msg = 'Ongeldig e-mailadres.';
+      if (error.code === 'auth/too-many-requests') msg = 'Te veel mislukte pogingen. Probeer later opnieuw.';
+      showAlert(msg);
+    } finally {
+      setLoading('loginForm', false);
+    }
+  });
+
+  document.getElementById('registerForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = document.getElementById('registerName').value;
+    const domain = document.getElementById('registerDomain').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
+
+    if (password.length < 6) {
+      showAlert('Wachtwoord moet minimaal 6 tekens lang zijn.');
+      return;
+    }
+
+    try {
+      clearAlerts();
+      setLoading('registerForm', true);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      await updateProfile(user, { displayName: name });
+      // Sla domein op in Firestore
+      await setDoc(doc(db, 'users', user.uid), { displayName: name, email: email, domain: domain });
+      showAlert('Account succesvol aangemaakt!', 'success');
+      showUserInfo(user);
+    } catch (error) {
+      console.error(error);
+      let msg = 'Er is een fout opgetreden bij het aanmaken van het account.';
+      if (error.code === 'auth/email-already-in-use') msg = 'Er bestaat al een account met dit e-mailadres.';
+      if (error.code === 'auth/invalid-email') msg = 'Ongeldig e-mailadres.';
+      if (error.code === 'auth/weak-password') msg = 'Wachtwoord is te zwak.';
+      showAlert(msg);
+    } finally {
+      setLoading('registerForm', false);
+    }
+  });
+
+  onAuthStateChanged(auth, user => user ? showUserInfo(user) : hideUserInfo());
+
+  // *** Belangrijk: exporteer deze handlers naar window voor je inline onclick’s! ***
+  window.switchTab = switchTab;
+  window.signInWithGoogle = signInWithGoogle;
+  window.signOut = signOut;
+</script>
+
+
+
+    
+    
+
+
+
+
+
+<!-- End of Reservation Section -->	<!-- Features Section-->
+
+<!-- End of Features Section--></div>
+<footer class="mastfoot my-3" style="background-color: #ffffff;">
+    <div class="inner container">
+         <div class="row">
+         	<div class="col-lg-4 col-md-12 d-flex align-items-center">
+         		
+         	</div>
+         	<div class="col-lg-4 col-md-12 d-flex align-items-center">
+         		<p class="mx-auto text-center mb-0">&copy; 2024 - SpectUX
+         	</div>
+           
+            <div class="col-lg-4 col-md-12">
+            	<nav class="nav nav-mastfoot justify-content-center">
+	                <a class="nav-link" href="#">
+	                	<i class="fab fa-instagram"></i>
+	                </a>
+	            </nav>
+            </div>
+            
+        </div>
+    </div>
+</footer>	<!-- External JS -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+	<script src="vendor/bootstrap/popper.min.js"></script>
+	<script src="vendor/bootstrap/bootstrap.min.js"></script>
+	<script src="vendor/select2/select2.min.js "></script>
+	<script src="vendor/owlcarousel/owl.carousel.min.js"></script>
+	<script src="vendor/stellar/jquery.stellar.js" type="text/javascript" charset="utf-8"></script>
+	<script src="vendor/isotope/isotope.min.js"></script>
+	<script src="vendor/lightcase/lightcase.js"></script>
+	<script src="vendor/waypoints/waypoint.min.js"></script>
+	 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+	 
+	<!-- Main JS -->
+	<script src="js/app.min.js "></script>
+	<script src="//localhost:35729/livereload.js"></script>
+    <script type="text/javascript">
+        (function(d, t) {
+            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            v.onload = function() {
+              window.voiceflow.chat.load({
+                verify: { projectID: '678a33c33f09b38dd6f7ec36' },
+                url: 'https://general-runtime.voiceflow.com',
+                versionID: 'production'
+              });
+            }
+            v.src = "https://cdn.voiceflow.com/widget/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+        })(document, 'script');
+      </script>
+</body>
+</html>
+
