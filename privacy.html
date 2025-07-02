@@ -19,50 +19,63 @@
   <p><strong>Contact:</strong> <a href="mailto:privacy@spectux.com">privacy@spectux.com</a></p>
 
   <h2>1. Wie zijn wij?</h2>
-  <p>SpectUX (hierna “wij” of “SpectUX”) biedt een platform voor gebruikersbeheer en Google Analytics-koppeling. In deze verklaring leggen we uit welke persoonsgegevens we verzamelen, waarom we dat doen en hoe we ze beschermen.</p>
+  <p>SpectUX (“wij”, “ons”) is een webdesign- en hostingbedrijf dat via haar platform optioneel een Google Analytics-integratie aanbiedt aan gebruikers.</p>
 
   <h2>2. Welke gegevens verzamelen we?</h2>
   <ul>
-    <li><strong>Authenticatiegegevens:</strong> e-mailadres, versleuterd wachtwoord (Firebase Authentication), optioneel Google-accountinfo.</li>
-    <li><strong>Gebruikersprofiel:</strong> Firebase UID, Analytics Property ID (door jou ingevoerd), OAuth-access_token voor Analytics.</li>
-    <li><strong>Technische data:</strong> IP-adres, apparaat- en browserinformatie (via Firebase/Analytics, mits gekoppeld).</li>
+    <li><strong>Accountgegevens:</strong> Naam, e-mailadres, versleuteld wachtwoord (via Firebase Authentication).</li>
+    <li><strong>Google-gebruikersgegevens (via OAuth):</strong> Met jouw toestemming verzamelen we een <code>access_token</code> om tijdelijk toegang te krijgen tot jouw Google Analytics-property’s (alleen-lezen).</li>
+    <li><strong>Technische informatie:</strong> IP-adres, browser- en apparaatgegevens (automatisch verzameld via Firebase of Analytics, indien actief).</li>
   </ul>
 
-  <h2>3. Waarom verzamelen we deze gegevens?</h2>
+  <h2>3. Gebruik van Google API’s</h2>
+  <p>We gebruiken de volgende Google API’s:</p>
   <ul>
-    <li><strong>Inloggen & accountbeheer:</strong> veilige toegang tot je account.</li>
-    <li><strong>Analytics-koppeling:</strong> opslaan en gebruiken van jouw Analytics-ID en token.</li>
-    <li><strong>Onderhoud & verbetering:</strong> foutenlogboeken en prestatie-optimalisatie.</li>
+    <li>Google OAuth 2.0 – voor veilige authenticatie en machtiging.</li>
+    <li>Google Analytics API – uitsluitend voor het ophalen van statistieken over jouw eigen website (alleen-lezen, <code>https://www.googleapis.com/auth/analytics.readonly</code>).</li>
   </ul>
+  <p>Deze gegevens worden <strongniet opgeslagen na je sessie</strong>, tenzij je er expliciet voor kiest de integratie op te slaan in je account. We gebruiken de gegevens nooit voor advertenties of profiling.</p>
 
-  <h2>4. Rechtsgrond</h2>
+  <h2>4. Waarom verzamelen we deze gegevens?</h2>
   <ul>
-    <li><strong>Uitvoering overeenkomst:</strong> inloggen en gebruik van de dienst.</li>
-    <li><strong>Gerechtvaardigd belang:</strong> beveiliging en onderhoud van ons platform.</li>
-    <li><strong>Toestemming:</strong> expliciete toestemming voor Google Analytics-koppeling (OAuth 2.0).</li>
+    <li>Voor veilige accountaanmaak en toegang tot ons dashboard.</li>
+    <li>Voor optionele integratie van jouw website met Google Analytics.</li>
+    <li>Voor onderhoud, foutopsporing en beveiligingsdoeleinden.</li>
   </ul>
 
-  <h2>5. Bewaartermijn</h2>
-  <p>Authenticatiegegevens bewaren we totdat je je account verwijdert. Analytics-gegevens bewaren we maximaal één jaar na laatste gebruik, tenzij je eerder verwijdert.</p>
-
-  <h2>6. Delen met derden</h2>
+  <h2>5. Rechtsgrondslag</h2>
   <ul>
-    <li><strong>Firebase (Google LLC):</strong> Authentication & Firestore.</li>
-    <li><strong>Google Analytics:</strong> wanneer je koppelt.</li>
-    <li>We delen geen gegevens met andere partijen zonder jouw uitdrukkelijke toestemming.</li>
+    <li><strong>Toestemming:</strong> je geeft expliciet toestemming voor de Google Analytics-koppeling via OAuth.</li>
+    <li><strong>Overeenkomst:</strong> je gebruikt ons platform op basis van onze gebruiksvoorwaarden.</li>
+    <li><strong>Gerechtvaardigd belang:</strong> technische logging en beveiliging.</li>
   </ul>
 
-  <h2>7. Jouw rechten</h2>
-  <p>Je hebt recht op inzage, correctie of verwijdering van je gegevens. Je kunt consent voor Analytics-koppeling intrekken door uit te loggen en de koppeling in je account te verwijderen. Je kunt een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
+  <h2>6. Verwijderen of intrekken van toestemming</h2>
+  <p>Je kunt je SpectUX-account op elk moment verwijderen. Je kunt ook de Google-koppeling intrekken via: <br>
+    <a href="https://myaccount.google.com/permissions" target="_blank">https://myaccount.google.com/permissions</a>
+  </p>
 
-  <h2>8. Cookies</h2>
-  <p>We gebruiken cookies en vergelijkbare technieken voor sessiebeheer en, na jouw toestemming, Google Analytics.</p>
+  <h2>7. Gegevensbewaring</h2>
+  <p>We bewaren je accountgegevens totdat je je account verwijdert. De Google Analytics-token wordt tijdelijk opgeslagen en automatisch verwijderd binnen 12 uur tenzij anders aangegeven. Je kunt dit altijd verwijderen in je accountinstellingen.</p>
+
+  <h2>8. Delen met derden</h2>
+  <ul>
+    <li><strong>Firebase (Google LLC):</strong> voor authenticatie en hosting.</li>
+    <li><strong>Google Analytics:</strong> als je deze optioneel koppelt.</li>
+    <li>We delen je gegevens nooit met andere partijen of gebruiken ze voor andere doeleinden dan hierboven beschreven.</li>
+  </ul>
 
   <h2>9. Beveiliging</h2>
-  <p>We nemen technische en organisatorische maatregelen (TLS-versleuteling, Firebase-beveiligingsregels) om je gegevens te beschermen.</p>
+  <p>We nemen passende technische en organisatorische maatregelen om je gegevens te beschermen, waaronder TLS-encryptie, OAuth-beveiliging en Firebase Security Rules.</p>
 
-  <h2>10. Wijzigingen</h2>
-  <p>We kunnen deze verklaring aanpassen. De “Laatst bijgewerkt”-datum bovenaan toont de meest recente versie.</p>
+  <h2>10. Cookies</h2>
+  <p>We gebruiken cookies alleen voor sessiebeheer en, na jouw toestemming, voor Google Analytics. Je kunt je cookie-instellingen altijd wijzigen via je browser.</p>
+
+  <h2>11. Jouw rechten</h2>
+  <p>Je hebt het recht op inzage, correctie en verwijdering van je gegevens. Neem hiervoor contact met ons op via <a href="mailto:privacy@spectux.com">privacy@spectux.com</a>. Je kunt ook een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
+
+  <h2>12. Wijzigingen</h2>
+  <p>Deze verklaring kan worden bijgewerkt. Raadpleeg deze pagina regelmatig voor de meest recente versie.</p>
 
   <footer>
     &copy; 2025 SpectUX – <a href="https://spectux.com">https://spectux.com</a>
