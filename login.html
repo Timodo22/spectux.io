@@ -107,28 +107,162 @@
 </script>
 
 <!-- 3) Google API + OAuth2 init -->
-<script>
-  const GA_CLIENT_ID = '789825620052-78u9edgmvcvecnsvpebt08h8ktsjhr0s.apps.googleusercontent.com';
-  const GA_SCOPES    = 'https://www.googleapis.com/auth/analytics.readonly';
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
 
-  function initGAPI() {
-    // laad client én auth2 tegelijk
-    gapi.load('client:auth2', () => {
-gapi.client.init({
-  clientId:     GA_CLIENT_ID,
-  scope:        GA_SCOPES,
-  ux_mode:      'popup',
-  redirect_uri: 'postmessage'
-})
-.then(() => console.log('gapi client & auth2 klaar met popup-modus'))
-.catch(err => {
-  console.error('gapi init fout:', err);
-  alert('Google API initialisatie fout: ' + err.error);
+<script>
+const GA_CLIENT_ID = '789825620052-78u9edgmvcvecnsvpebt08h8ktsjhr0s.apps.googleusercontent.com';
+const GA_SCOPES = 'https://www.googleapis.com/auth/analytics.readonly';
+
+let tokenClient;
+let gapiInited = false;
+let gisInited = false;
+
+// Initialiseer Google API
+function initializeGapi() {
+  gapi.load('client', async () => {
+    await gapi.client.init({
+      discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/analytics/v3/rest'],
+    });
+    gapiInited = true;
+    maybeEnableButtons();
+  });
+}
+
+// Initialiseer Google Identity Services
+function initializeGis() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GA_CLIENT_ID,
+    scope: GA_SCOPES,
+    callback: (response) => {
+      if (response.error !== undefined) {
+        console.error('Token error:', response.error);
+        showAlert('Authenticatie fout: ' + response.error, 'danger');
+        resetAnalyticsButton();
+        return;
+      }
+      
+      // Success - we hebben een access token
+      console.log('Access token ontvangen:', response.access_token);
+      testAnalyticsConnection(response.access_token);
+    },
+  });
+  gisInited = true;
+  maybeEnableButtons();
+}
+
+// Enable buttons wanneer beide APIs geladen zijn
+function maybeEnableButtons() {
+  if (gapiInited && gisInited) {
+    document.getElementById('testAnalyticsBtn').disabled = false;
+    console.log('Google APIs succesvol geladen');
+  }
+}
+
+// Test Analytics verbinding
+async function testAnalyticsConnection(accessToken) {
+  try {
+    const response = await gapi.client.request({
+      path: 'https://www.googleapis.com/analytics/v3/management/accounts',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+    
+    console.log('Analytics verbinding succesvol:', response);
+    showAlert('Google Analytics succesvol gekoppeld!', 'success');
+    
+    // Update button state
+    const btn = document.getElementById('testAnalyticsBtn');
+    btn.innerHTML = '<i class="fas fa-check"></i> Gekoppeld';
+    btn.classList.add('btn-success');
+    btn.classList.remove('btn-primary');
+    
+  } catch (error) {
+    console.error('Analytics API fout:', error);
+    showAlert('Fout bij het verbinden met Google Analytics: ' + error.message, 'danger');
+    resetAnalyticsButton();
+  }
+}
+
+// Reset button naar originele state
+function resetAnalyticsButton() {
+  const btn = document.getElementById('testAnalyticsBtn');
+  btn.innerHTML = 'Koppel Analytics';
+  btn.disabled = false;
+  btn.classList.remove('btn-success');
+  btn.classList.add('btn-primary');
+}
+
+// Koppel Analytics event handler
+document.getElementById('testAnalyticsBtn').addEventListener('click', async () => {
+  try {
+    // Toon loading state
+    const btn = document.getElementById('testAnalyticsBtn');
+    btn.innerHTML = '<span class="loading"></span> Verbinden...';
+    btn.disabled = true;
+    
+    // Clear any existing alerts
+    clearAlerts();
+    
+    // Check of APIs geladen zijn
+    if (!gapiInited || !gisInited) {
+      throw new Error('Google APIs nog niet geladen. Wacht even en probeer opnieuw.');
+    }
+    
+    // Start OAuth flow
+    tokenClient.requestAccessToken({ prompt: 'consent' });
+    
+  } catch (error) {
+    console.error('Analytics koppeling fout:', error);
+    showAlert('Fout bij het koppelen: ' + error.message, 'danger');
+    resetAnalyticsButton();
+  }
 });
 
-    });
+// Helper functies voor alerts
+function showAlert(message, type) {
+  const alertContainer = document.getElementById('alertContainer');
+  const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+  
+  alertContainer.innerHTML = `
+    <div class="alert ${alertClass}" role="alert">
+      <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+      ${message}
+    </div>
+  `;
+  
+  // Auto-hide success messages
+  if (type === 'success') {
+    setTimeout(() => {
+      alertContainer.innerHTML = '';
+    }, 5000);
   }
+}
+
+function clearAlerts() {
+  document.getElementById('alertContainer').innerHTML = '';
+}
+
+// Laad APIs wanneer pagina geladen is
+window.addEventListener('load', () => {
+  initializeGapi();
+  initializeGis();
+});
 </script>
+
+<!-- Update het Analytics button om disabled te starten -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Disable button totdat APIs geladen zijn
+  document.getElementById('testAnalyticsBtn').disabled = true;
+  document.getElementById('testAnalyticsBtn').innerHTML = '<span class="loading"></span> Laden...';
+});
+</script>
+
+
+
+
 <!-- opload pas api.js en daarna pas init -->
 <script src="https://apis.google.com/js/api.js" onload="initGAPI()"></script>
 
@@ -196,32 +330,184 @@ gapi.client.init({
   });
 
   // Koppel Analytics (gapi.auth2)
-  document.getElementById('testAnalyticsBtn').addEventListener('click', async () => {
-    try {
-      const auth2 = gapi.auth2.getAuthInstance();
-      if (!auth2) throw new Error('Google OAuth2 nog niet geladen');
-      const googleUser = await auth2.signIn();
-      const token      = googleUser.getAuthResponse().access_token;
-      if (!token) throw new Error('Geen access token gekregen');
+// Vervang de testAnalyticsConnection functie door deze verbeterde versie:
 
-      let prop = document.getElementById('userAnalyticsId').textContent;
-      if (!prop) prop = prompt('Vul je GA4 Property ID in:');
-
-      const user = auth.currentUser;
-      await db.collection('clients').doc(user.uid).update({
-        gaAccessToken: token,
-        analyticsPropertyId: prop
-      });
-      alert('✅ Koppeling geslaagd!');
-    } catch(err) {
-      console.error('Koppelen fout:', err);
-      if (err.error === 'popup_closed_by_user') {
-        alert('Je hebt de popup gesloten vóór afronding. Probeer het nogmaals.');
-      } else {
-        alert('Koppelen mislukt: ' + (err.message || JSON.stringify(err)));
+async function testAnalyticsConnection(accessToken) {
+  try {
+    console.log('Testing Analytics connection met token:', accessToken);
+    
+    // Eerst testen of gapi.client beschikbaar is
+    if (!gapi.client) {
+      throw new Error('Google API client niet geladen');
+    }
+    
+    // Test de verbinding met een eenvoudige request
+    const response = await gapi.client.request({
+      path: 'https://www.googleapis.com/analytics/v3/management/accounts',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
       }
+    });
+    
+    console.log('Analytics API response:', response);
+    
+    // Check of response een error bevat
+    if (response.error) {
+      throw new Error(`Analytics API fout: ${response.error.message || response.error}`);
+    }
+    
+    // Check of we accounts hebben
+    if (response.result && response.result.items) {
+      console.log('Analytics accounts gevonden:', response.result.items.length);
+      showAlert(`Google Analytics succesvol gekoppeld! ${response.result.items.length} account(s) gevonden.`, 'success');
+    } else {
+      showAlert('Google Analytics gekoppeld, maar geen accounts gevonden.', 'success');
+    }
+    
+    // Update button state
+    const btn = document.getElementById('testAnalyticsBtn');
+    btn.innerHTML = '<i class="fas fa-check"></i> Gekoppeld';
+    btn.classList.add('btn-success');
+    btn.classList.remove('btn-primary');
+    
+  } catch (error) {
+    console.error('Analytics API fout details:', error);
+    
+    // Uitgebreide error logging
+    let errorMessage = 'Onbekende fout bij het verbinden met Google Analytics';
+    
+    if (error.result && error.result.error) {
+      // GAPI error format
+      const apiError = error.result.error;
+      errorMessage = `${apiError.message || apiError.code || 'API fout'}`;
+      console.error('GAPI error details:', apiError);
+    } else if (error.message) {
+      errorMessage = error.message;
+    } else if (error.status) {
+      errorMessage = `HTTP ${error.status}: ${error.statusText || 'Server fout'}`;
+    } else if (typeof error === 'string') {
+      errorMessage = error;
+    }
+    
+    console.error('Final error message:', errorMessage);
+    showAlert('Fout bij het verbinden met Google Analytics: ' + errorMessage, 'danger');
+    resetAnalyticsButton();
+  }
+}
+
+// Ook de callback functie verbeteren:
+function initializeGis() {
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: GA_CLIENT_ID,
+    scope: GA_SCOPES,
+    callback: (response) => {
+      console.log('OAuth2 callback response:', response);
+      
+      if (response.error !== undefined) {
+        console.error('OAuth2 token error:', response.error);
+        let errorMessage = 'Authenticatie fout';
+        
+        switch(response.error) {
+          case 'popup_closed_by_user':
+            errorMessage = 'Het inlogscherm werd gesloten. Probeer opnieuw en voltooi het inlogproces.';
+            break;
+          case 'access_denied':
+            errorMessage = 'Toegang geweigerd. Geef toestemming om door te gaan.';
+            break;
+          case 'popup_blocked':
+            errorMessage = 'Popup werd geblokkeerd. Sta popups toe voor deze website.';
+            break;
+          default:
+            errorMessage = `Authenticatie fout: ${response.error}`;
+        }
+        
+        showAlert(errorMessage, 'danger');
+        resetAnalyticsButton();
+        return;
+      }
+      
+      // Check of we een access token hebben
+      if (!response.access_token) {
+        console.error('Geen access token ontvangen:', response);
+        showAlert('Geen toegangstoken ontvangen van Google', 'danger');
+        resetAnalyticsButton();
+        return;
+      }
+      
+      // Success - we hebben een access token
+      console.log('Access token succesvol ontvangen');
+      testAnalyticsConnection(response.access_token);
+    },
+  });
+  gisInited = true;
+  maybeEnableButtons();
+}
+
+// Verbeterde GAPI initialisatie
+function initializeGapi() {
+  gapi.load('client', async () => {
+    try {
+      await gapi.client.init({
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/analytics/v3/rest'],
+      });
+      console.log('GAPI client succesvol geïnitialiseerd');
+      gapiInited = true;
+      maybeEnableButtons();
+    } catch (error) {
+      console.error('GAPI initialisatie fout:', error);
+      showAlert('Fout bij het laden van Google API: ' + (error.message || error), 'danger');
     }
   });
+}
+
+// Debug functie om de huidige staat te controleren
+function debugGoogleAPIs() {
+  console.log('=== Google APIs Debug Info ===');
+  console.log('gapiInited:', gapiInited);
+  console.log('gisInited:', gisInited);
+  console.log('gapi available:', typeof gapi !== 'undefined');
+  console.log('google available:', typeof google !== 'undefined');
+  console.log('gapi.client available:', typeof gapi?.client !== 'undefined');
+  console.log('tokenClient available:', typeof tokenClient !== 'undefined');
+  
+  if (typeof gapi !== 'undefined' && gapi.client) {
+    console.log('gapi.client.analytics available:', typeof gapi.client.analytics !== 'undefined');
+  }
+}
+
+// Roep debug functie aan wanneer button wordt geklikt
+document.getElementById('testAnalyticsBtn').addEventListener('click', async () => {
+  debugGoogleAPIs(); // Debug info
+  
+  try {
+    // Toon loading state
+    const btn = document.getElementById('testAnalyticsBtn');
+    btn.innerHTML = '<span class="loading"></span> Verbinden...';
+    btn.disabled = true;
+    
+    // Clear any existing alerts
+    clearAlerts();
+    
+    // Check of APIs geladen zijn
+    if (!gapiInited || !gisInited) {
+      throw new Error('Google APIs nog niet geladen. Wacht even en probeer opnieuw.');
+    }
+    
+    if (!tokenClient) {
+      throw new Error('OAuth2 client niet geïnitialiseerd');
+    }
+    
+    // Start OAuth flow
+    console.log('Starting OAuth2 flow...');
+    tokenClient.requestAccessToken({ prompt: 'consent' });
+    
+  } catch (error) {
+    console.error('Analytics koppeling fout:', error);
+    showAlert('Fout bij het koppelen: ' + (error.message || error), 'danger');
+    resetAnalyticsButton();
+  }
+});
+
 
   // Logout
   document.getElementById('btn-logout').addEventListener('click', () => auth.signOut());
