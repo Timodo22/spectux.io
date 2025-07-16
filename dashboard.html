@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Analytics Dashboard</title>
+    <title>Google Analytics 4 Dashboard</title>
     <link href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     <style>
@@ -32,6 +32,11 @@
             margin: 0;
             font-size: 2.5rem;
             font-weight: 300;
+        }
+        .header .subtitle {
+            margin-top: 10px;
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
         .content {
             padding: 30px;
@@ -101,6 +106,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-right: 10px;
         }
         .btn-primary {
             background: linear-gradient(135deg, #764ba2 0%, #ff00cc 100%);
@@ -109,6 +115,10 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         .loading {
             display: inline-block;
@@ -170,26 +180,36 @@
             max-height: 200px;
             overflow-y: auto;
         }
+        .property-info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
     </style>
 </head>
 <body>
     <div class="dashboard">
         <div class="header">
-            <h1><i class="fas fa-chart-line"></i> Google Analytics Dashboard</h1>
-            <p>SpectUX Analytics Data Viewer</p>
+            <h1><i class="fas fa-chart-line"></i> Google Analytics 4 Dashboard</h1>
+            <p class="subtitle">SpectUX Analytics Data Viewer - GA4 Edition</p>
         </div>
         
         <div class="content">
             <div id="alertContainer"></div>
             
             <div class="controls">
-                <h3><i class="fas fa-cog"></i> Data Ophalen</h3>
+                <h3><i class="fas fa-cog"></i> GA4 Data Ophalen</h3>
+                
                 <div class="form-group">
-                    <label for="profileSelect">Selecteer Analytics View:</label>
-                    <select id="profileSelect" class="form-control">
-                        <option value="">Eerst authenticeren...</option>
-                    </select>
+                    <label for="propertyId">GA4 Property ID:</label>
+                    <input type="text" id="propertyId" class="form-control" placeholder="bijv. 123456789">
+                    <small style="color: #666; font-size: 0.9em;">
+                        Vind je Property ID in GA4: Admin > Property Settings > PROPERTY ID
+                    </small>
                 </div>
+                
                 <div class="form-group">
                     <label for="startDate">Start Datum:</label>
                     <input type="date" id="startDate" class="form-control">
@@ -198,6 +218,7 @@
                     <label for="endDate">Eind Datum:</label>
                     <input type="date" id="endDate" class="form-control">
                 </div>
+                
                 <button id="authBtn" class="btn btn-primary">
                     <i class="fas fa-sign-in-alt"></i> Authenticeren
                 </button>
@@ -206,20 +227,25 @@
                 </button>
             </div>
             
+            <div id="propertyInfo" class="property-info" style="display: none;">
+                <h4><i class="fas fa-info-circle"></i> Property Informatie</h4>
+                <div id="propertyDetails"></div>
+            </div>
+            
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3>Sessies</h3>
+                    <h3>Active Users</h3>
+                    <div class="value" id="activeUsersValue">-</div>
+                    <div class="label">Actieve gebruikers</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Sessions</h3>
                     <div class="value" id="sessionsValue">-</div>
                     <div class="label">Totaal aantal sessies</div>
                 </div>
                 <div class="stat-card">
-                    <h3>Gebruikers</h3>
-                    <div class="value" id="usersValue">-</div>
-                    <div class="label">Unieke bezoekers</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Paginaweergaven</h3>
-                    <div class="value" id="pageviewsValue">-</div>
+                    <h3>Screen Page Views</h3>
+                    <div class="value" id="screenPageViewsValue">-</div>
                     <div class="label">Totaal paginaweergaven</div>
                 </div>
                 <div class="stat-card">
@@ -235,9 +261,9 @@
                     <thead>
                         <tr>
                             <th>Datum</th>
-                            <th>Sessies</th>
-                            <th>Gebruikers</th>
-                            <th>Paginaweergaven</th>
+                            <th>Active Users</th>
+                            <th>Sessions</th>
+                            <th>Screen Page Views</th>
                             <th>Bounce Rate</th>
                         </tr>
                     </thead>
@@ -258,6 +284,7 @@
     <script src="https://apis.google.com/js/api.js" async defer></script>
 
     <script>
+        // Je eigen OAuth2 Client ID - vervang dit door je eigen!
         const GA_CLIENT_ID = '789825620052-78u9edgmvcvecnsvpebt08h8ktsjhr0s.apps.googleusercontent.com';
         const GA_SCOPES = 'https://www.googleapis.com/auth/analytics.readonly';
 
@@ -265,7 +292,6 @@
         let gapiInited = false;
         let gisInited = false;
         let currentAccessToken = null;
-        let analyticsProfiles = [];
 
         // Set default dates
         const today = new Date();
@@ -278,13 +304,14 @@
             gapi.load('client', async () => {
                 try {
                     await gapi.client.init({
-                        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/analytics/v3/rest'],
+                        discoveryDocs: ['https://analyticsdata.googleapis.com/$discovery/rest?version=v1beta'],
                     });
                     gapiInited = true;
                     maybeEnableButtons();
-                    showAlert('Google API succesvol geladen', 'success');
+                    showAlert('Google Analytics Data API succesvol geladen', 'success');
                 } catch (error) {
                     showAlert('Fout bij laden Google API: ' + error.message, 'danger');
+                    debug('GAPI init error:', error);
                 }
             });
         }
@@ -297,14 +324,12 @@
                 callback: async (response) => {
                     if (response.error) {
                         showAlert('Authenticatie fout: ' + response.error, 'danger');
+                        debug('Auth error:', response);
                         return;
                     }
                     
                     currentAccessToken = response.access_token;
-                    showAlert('Succesvol geauthenticeerd!', 'success');
-                    
-                    // Load profiles
-                    await loadAnalyticsProfiles();
+                    showAlert('Succesvol geauthenticeerd met GA4!', 'success');
                     
                     // Enable data loading
                     document.getElementById('loadDataBtn').disabled = false;
@@ -321,137 +346,127 @@
             }
         }
 
-        // Load Analytics profiles
-        async function loadAnalyticsProfiles() {
-            try {
-                showAlert('Analytics profielen laden...', 'info');
-                
-                const accountsResponse = await gapi.client.request({
-                    path: 'https://www.googleapis.com/analytics/v3/management/accounts',
-                    headers: { 'Authorization': `Bearer ${currentAccessToken}` }
-                });
-
-                debug('Accounts response:', accountsResponse);
-
-                if (!accountsResponse.result.items || accountsResponse.result.items.length === 0) {
-                    showAlert('Geen Analytics accounts gevonden', 'danger');
-                    return;
-                }
-
-                const accountId = accountsResponse.result.items[0].id;
-                
-                // Get properties
-                const propertiesResponse = await gapi.client.request({
-                    path: `https://www.googleapis.com/analytics/v3/management/accounts/${accountId}/webproperties`,
-                    headers: { 'Authorization': `Bearer ${currentAccessToken}` }
-                });
-
-                debug('Properties response:', propertiesResponse);
-
-                if (!propertiesResponse.result.items || propertiesResponse.result.items.length === 0) {
-                    showAlert('Geen Analytics properties gevonden', 'danger');
-                    return;
-                }
-
-                const propertyId = propertiesResponse.result.items[0].id;
-                
-                // Get profiles/views
-                const profilesResponse = await gapi.client.request({
-                    path: `https://www.googleapis.com/analytics/v3/management/accounts/${accountId}/webproperties/${propertyId}/profiles`,
-                    headers: { 'Authorization': `Bearer ${currentAccessToken}` }
-                });
-
-                debug('Profiles response:', profilesResponse);
-
-                if (!profilesResponse.result.items || profilesResponse.result.items.length === 0) {
-                    showAlert('Geen Analytics views gevonden', 'danger');
-                    return;
-                }
-
-                // Populate dropdown
-                const select = document.getElementById('profileSelect');
-                select.innerHTML = '<option value="">Selecteer een view...</option>';
-                
-                profilesResponse.result.items.forEach(profile => {
-                    const option = document.createElement('option');
-                    option.value = profile.id;
-                    option.textContent = `${profile.name} (${profile.websiteUrl || 'Geen URL'})`;
-                    select.appendChild(option);
-                });
-
-                showAlert(`${profilesResponse.result.items.length} Analytics view(s) gevonden`, 'success');
-                
-            } catch (error) {
-                debug('Error loading profiles:', error);
-                showAlert('Fout bij laden Analytics profielen: ' + (error.result?.error?.message || error.message), 'danger');
-            }
-        }
-
-        // Load Analytics data
+        // Load GA4 Analytics data
         async function loadAnalyticsData() {
-            const profileId = document.getElementById('profileSelect').value;
+            const propertyId = document.getElementById('propertyId').value.trim();
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
 
-            if (!profileId) {
-                showAlert('Selecteer eerst een Analytics view', 'danger');
+            if (!propertyId) {
+                showAlert('Voer eerst een GA4 Property ID in', 'danger');
+                return;
+            }
+
+            if (!currentAccessToken) {
+                showAlert('Authenticeer eerst met Google', 'danger');
                 return;
             }
 
             try {
-                showAlert('Analytics data laden...', 'info');
+                showAlert('GA4 Analytics data laden...', 'info');
                 
-                const response = await gapi.client.request({
-                    path: 'https://www.googleapis.com/analytics/v3/data/ga',
-                    params: {
-                        ids: `ga:${profileId}`,
-                        'start-date': startDate,
-                        'end-date': endDate,
-                        metrics: 'ga:sessions,ga:users,ga:pageviews,ga:bounceRate',
-                        dimensions: 'ga:date'
+                // GA4 Data API v1 request
+                const response = await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${currentAccessToken}`,
+                        'Content-Type': 'application/json',
                     },
-                    headers: { 'Authorization': `Bearer ${currentAccessToken}` }
+                    body: JSON.stringify({
+                        dateRanges: [
+                            {
+                                startDate: startDate,
+                                endDate: endDate
+                            }
+                        ],
+                        dimensions: [
+                            { name: 'date' }
+                        ],
+                        metrics: [
+                            { name: 'activeUsers' },
+                            { name: 'sessions' },
+                            { name: 'screenPageViews' },
+                            { name: 'bounceRate' }
+                        ],
+                        orderBys: [
+                            {
+                                dimension: {
+                                    dimensionName: 'date'
+                                }
+                            }
+                        ]
+                    })
                 });
 
-                debug('Analytics data response:', response);
+                const data = await response.json();
+                debug('GA4 API response:', data);
 
-                if (response.result.rows && response.result.rows.length > 0) {
-                    displayAnalyticsData(response.result);
-                    showAlert(`Data succesvol geladen voor ${response.result.rows.length} dagen`, 'success');
+                if (!response.ok) {
+                    throw new Error(data.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                if (data.rows && data.rows.length > 0) {
+                    displayGA4Data(data);
+                    showAlert(`Data succesvol geladen voor ${data.rows.length} dagen`, 'success');
                 } else {
                     showAlert('Geen data gevonden voor de geselecteerde periode', 'info');
                 }
 
             } catch (error) {
-                debug('Error loading analytics data:', error);
-                showAlert('Fout bij laden Analytics data: ' + (error.result?.error?.message || error.message), 'danger');
+                debug('Error loading GA4 data:', error);
+                let errorMessage = 'Fout bij laden GA4 data: ';
+                
+                if (error.message.includes('403')) {
+                    errorMessage += 'Geen toegang tot deze property. Controleer je Property ID en permissions.';
+                } else if (error.message.includes('404')) {
+                    errorMessage += 'Property niet gevonden. Controleer je Property ID.';
+                } else {
+                    errorMessage += error.message;
+                }
+                
+                showAlert(errorMessage, 'danger');
             }
         }
 
-        // Display Analytics data
-        function displayAnalyticsData(data) {
+        // Display GA4 Analytics data
+        function displayGA4Data(data) {
             const rows = data.rows;
             
             // Calculate totals
+            let totalActiveUsers = 0;
             let totalSessions = 0;
-            let totalUsers = 0;
-            let totalPageviews = 0;
+            let totalScreenPageViews = 0;
             let totalBounceRate = 0;
+            let validBounceRateDays = 0;
 
             rows.forEach(row => {
-                totalSessions += parseInt(row[1]);
-                totalUsers += parseInt(row[2]);
-                totalPageviews += parseInt(row[3]);
-                totalBounceRate += parseFloat(row[4]);
+                totalActiveUsers += parseInt(row.metricValues[0].value || 0);
+                totalSessions += parseInt(row.metricValues[1].value || 0);
+                totalScreenPageViews += parseInt(row.metricValues[2].value || 0);
+                
+                const bounceRate = parseFloat(row.metricValues[3].value || 0);
+                if (bounceRate > 0) {
+                    totalBounceRate += bounceRate;
+                    validBounceRateDays++;
+                }
             });
 
-            const avgBounceRate = totalBounceRate / rows.length;
+            const avgBounceRate = validBounceRateDays > 0 ? totalBounceRate / validBounceRateDays : 0;
 
             // Update stat cards
+            document.getElementById('activeUsersValue').textContent = totalActiveUsers.toLocaleString();
             document.getElementById('sessionsValue').textContent = totalSessions.toLocaleString();
-            document.getElementById('usersValue').textContent = totalUsers.toLocaleString();
-            document.getElementById('pageviewsValue').textContent = totalPageviews.toLocaleString();
-            document.getElementById('bounceRateValue').textContent = avgBounceRate.toFixed(2) + '%';
+            document.getElementById('screenPageViewsValue').textContent = totalScreenPageViews.toLocaleString();
+            document.getElementById('bounceRateValue').textContent = (avgBounceRate * 100).toFixed(2) + '%';
+
+            // Show property info
+            const propertyId = document.getElementById('propertyId').value;
+            document.getElementById('propertyDetails').innerHTML = `
+                <strong>Property ID:</strong> ${propertyId}<br>
+                <strong>Periode:</strong> ${document.getElementById('startDate').value} tot ${document.getElementById('endDate').value}<br>
+                <strong>Aantal dagen:</strong> ${rows.length}
+            `;
+            document.getElementById('propertyInfo').style.display = 'block';
 
             // Update table
             const tableBody = document.getElementById('dataTableBody');
@@ -459,15 +474,20 @@
             
             rows.forEach(row => {
                 const tr = document.createElement('tr');
-                const date = row[0];
+                const date = row.dimensionValues[0].value;
                 const formattedDate = `${date.substr(0,4)}-${date.substr(4,2)}-${date.substr(6,2)}`;
+                
+                const activeUsers = parseInt(row.metricValues[0].value || 0);
+                const sessions = parseInt(row.metricValues[1].value || 0);
+                const screenPageViews = parseInt(row.metricValues[2].value || 0);
+                const bounceRate = parseFloat(row.metricValues[3].value || 0);
                 
                 tr.innerHTML = `
                     <td>${formattedDate}</td>
-                    <td>${parseInt(row[1]).toLocaleString()}</td>
-                    <td>${parseInt(row[2]).toLocaleString()}</td>
-                    <td>${parseInt(row[3]).toLocaleString()}</td>
-                    <td>${parseFloat(row[4]).toFixed(2)}%</td>
+                    <td>${activeUsers.toLocaleString()}</td>
+                    <td>${sessions.toLocaleString()}</td>
+                    <td>${screenPageViews.toLocaleString()}</td>
+                    <td>${(bounceRate * 100).toFixed(2)}%</td>
                 `;
                 tableBody.appendChild(tr);
             });
@@ -497,7 +517,7 @@
         function debug(message, data) {
             console.log(message, data);
             const debugContent = document.getElementById('debugContent');
-            debugContent.innerHTML += `<br>${message}: ${JSON.stringify(data, null, 2)}`;
+            debugContent.innerHTML += `<br><strong>${message}:</strong><br>${JSON.stringify(data, null, 2)}<br>`;
             document.getElementById('debugInfo').style.display = 'block';
         }
 
